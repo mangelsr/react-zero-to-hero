@@ -1,46 +1,52 @@
 import React from 'react';
-import moment from "moment";
+import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import { activateNote } from '../../actions/notes';
-
+import { activeNote } from '../../actions/notes';
 
 export const JournalEntry = ({ id, date, title, body, url }) => {
-    
-    const dispatch = useDispatch();
-    
-    const noteDate = moment(date);
 
-    const handleActivateNote = () => {
-        dispatch(activateNote(id, {
-            title, body, date, url
-        }));
-    };
+    const noteDate = moment(date);
+    const dispatch = useDispatch();
+
+    const handleEntryClick = () => {
+        dispatch( 
+            activeNote( id, {
+                date, title, body, url
+            })
+        );
+    }
 
     return (
-        <div onClick={handleActivateNote} className="journal__entry pointer animate__animated animate__fadeIn">
+        <div 
+            className="journal__entry pointer animate__animated animate__fadeIn animate__faster"
+            onClick={ handleEntryClick }
+        >
+            
             {
                 url &&
-                <div
+                <div 
                     className="journal__entry-picture"
                     style={{
                         backgroundSize: 'cover',
-                        backgroundImage: `url(${url})`
-                    }}>
-                </div>
+                        backgroundImage: `url(${ url })`
+                    }}
+                ></div>
             }
-            <div className="journall__entry-body">
-                <p className="journall__entry-title">
+
+            <div className="journal__entry-body">
+                <p className="journal__entry-title">
                     { title }
                 </p>
-                <p className="journall__entry-content">
+                <p className="journal__entry-content">
                     { body }
                 </p>
             </div>
 
-            <div className="journall__entry-date-box">
-                <span>{ noteDate.format('dddd') }</span>
-                <h4>{ noteDate.format('Do') }</h4>
+            <div className="journal__entry-date-box">
+                <span> { noteDate.format('dddd') } </span>
+                <h4> { noteDate.format('Do') } </h4>
             </div>
+
         </div>
-    );
+    )
 }

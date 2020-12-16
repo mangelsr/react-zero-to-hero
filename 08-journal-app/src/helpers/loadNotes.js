@@ -1,17 +1,21 @@
-import { db } from "../firebase/firebaseConfig";
+import { db } from '../firebase/firebase-config';
 
 
-export const loadNotes = async (uid) => {
-    try {
-        const notesSnap = await db.collection(`${uid}/journal/notes`).get();
-        const notes = [];
-        notesSnap.forEach( childSnap => notes.push({
-            id: childSnap.id,
-            ...childSnap.data()
-        }));
-        return notes;
-    } catch (err) {
-        console.log(err);
-        return err;
-    }
-}; 
+
+export const loadNotes = async ( uid ) => {
+
+    const notesSnap = await db.collection(`${ uid }/journal/notes`).get();
+    const notes = [];
+
+    notesSnap.forEach( snapHijo => {
+        notes.push({
+            id: snapHijo.id,
+            ...snapHijo.data()
+        })
+    });
+    
+    return notes;
+}
+
+
+

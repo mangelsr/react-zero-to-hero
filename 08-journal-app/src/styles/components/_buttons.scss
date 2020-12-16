@@ -1,10 +1,11 @@
+
 .btn {
     background-color: transparent;
     border: none;
     color: white;
     cursor: pointer;
-    font-size: 20px;
-    padding: 7px 10px;
+    font-size: 12px;
+    padding: 7px 10px 7px 10px;
 
     transition: color .3s ease;
 
@@ -13,38 +14,38 @@
     }
 
     &:hover {
-        color: darken($color: white, $amount: 15)
+        color: darken($color: white, $amount: 10);
     }
+    
 }
+
 
 .btn-primary {
     background-color: $primary;
     border-radius: 2px;
-
-    transition: background-color .3s ease;
-
+    
     &:disabled {
-        background-color: lighten($color: $primary, $amount: 20)
+        background-color: lighten($color: $primary, $amount: 15);
     }
 
-    &:hover {
+    &:hover { 
         background-color: darken($color: $primary, $amount: 15);
     }
 }
 
 .btn-danger {
     background-color: red;
+
     transition: background-color .3s ease;
 
     &:hover {
-        background-color: darken($color: red, $amount: 5);
+        background-color: darken($color: red, $amount: 10);
     }
 }
 
 .btn-block {
     width: 100%;
 }
-
 
 .google-btn {
     cursor: pointer;
@@ -87,3 +88,4 @@
         background: $button-active-blue;
     }
 }
+

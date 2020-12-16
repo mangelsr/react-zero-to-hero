@@ -1,62 +1,61 @@
-import { firebase, googleAuthProvider } from "../firebase/firebaseConfig";
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
-import { types } from "../types/types";
-import { uiEndLoading, uiStartLoading } from "./ui";
-import { clearNotes } from "./notes";
+import { firebase, googleAuthProvider } from '../firebase/firebase-config';
+import { types } from '../types/types';
+import { startLoading, finishLoading } from './ui';
+import { noteLogout } from './notes';
+
 
 export const startLoginEmailPassword = (email, password) => {
     return async (dispatch) => {
         try {
-            dispatch(uiStartLoading());
-            const { user } = await firebase.auth().signInWithEmailAndPassword(email, password);
-            dispatch(login(user.uid, user.displayName));
+            dispatch( startLoading() );
+            const {user} = await firebase.auth().signInWithEmailAndPassword( email, password );
+            dispatch(login( user.uid, user.displayName ));
+            dispatch( finishLoading() );
         } catch (e) {
             console.log(e);
-            if (e.message) {
-                Swal.fire('Error', e.message, 'error');
-            }
-        } finally {
-            dispatch(uiEndLoading());
+            dispatch( finishLoading() );
+            Swal.fire('Error', e.message, 'error');
         }
-    };
+    }
 }
 
+export const startRegisterWithEmailPasswordName = ( email, password, name ) => {
+    return ( dispatch ) => {
+
+        firebase.auth().createUserWithEmailAndPassword( email, password )
+            .then( async({ user }) => {
+
+                await user.updateProfile({ displayName: name });
+
+                dispatch(
+                    login( user.uid, user.displayName )
+                );
+            })
+            .catch( e => {
+                console.log(e);
+                Swal.fire('Error', e.message, 'error');
+            })
+
+    }
+}
+
+
+
 export const startGoogleLogin = () => {
-    return async (dispatch) => {
-        try {
-            dispatch(uiStartLoading());
-            const { user } = await firebase.auth().signInWithPopup(googleAuthProvider);
-            dispatch(login(user.uid, user.displayName))
-        } catch (e) {
-            console.log(e);
-            if (e.message) {
-                Swal.fire('Error', e.message, 'error');
-            }
-        } finally {
-            dispatch(uiEndLoading());
-        }
-    };
-};
+    return ( dispatch ) => {
 
+        firebase.auth().signInWithPopup( googleAuthProvider )
+            .then( ({ user }) => {
+                dispatch(
+                    login( user.uid, user.displayName )
+                )
+            });
 
-export const startRegister = (email, password, name) => {
-    return async (dispatch) => {
-        try {
-            dispatch(uiStartLoading());
-            const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
-            await user.updateProfile({displayName: name});
-            dispatch(login(user.uid, user.displayName));
-        } catch (e) {
-            console.log(e);
-            if (e.message) {
-                Swal.fire('Error', e.message, 'error');
-            }
-        } finally {
-            dispatch(uiEndLoading());
-        }
-    };
-};
+    }
+}
+
 
 export const login = (uid, displayName) => ({
     type: types.login,
@@ -64,23 +63,21 @@ export const login = (uid, displayName) => ({
         uid,
         displayName
     }
-})
+});
+
 
 export const startLogout = () => {
-    return async (dispatch) => {
-        try {
-            await firebase.auth().signOut();
-            dispatch(logout());
-            dispatch(clearNotes());
-        } catch (e) {
-            console.log(e);
-            if (e.message) {
-                Swal.fire('Error', e.message, 'error');
-            }
-        }
-    };
-};
+    return async( dispatch ) => {
+        await firebase.auth().signOut();
+
+        dispatch( logout() );
+        dispatch( noteLogout() );
+    }
+}
+
 
 export const logout = () => ({
     type: types.logout
-});
+})
+
+

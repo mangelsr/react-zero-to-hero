@@ -1,24 +1,25 @@
-import { types } from "../types/types";
+import { types } from '../types/types';
+/*
+    {
+        uid: 'jagdfjahdsf127362718',
+        name: 'Fernando'
+    }
 
-/**
- * {
- *      uid: 'asdasdsadas'
- *      name: 'Miguel'
- * }
- */
+*/
+export const authReducer = ( state = {}, action ) => {
 
-export const authReducer = (state = {}, action) => {
-    switch (action?.type) {
+    switch ( action.type ) {
         case types.login:
             return {
                 uid: action.payload.uid,
                 name: action.payload.displayName
-            };
-        
+            }
+
         case types.logout:
-            return { };
-            
+                return { }
+    
         default:
             return state;
     }
-};
+
+}
