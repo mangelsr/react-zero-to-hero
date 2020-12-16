@@ -1,0 +1,14 @@
+p {
+    margin: auto 0;
+    cursor: pointer;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.done {
+    text-decoration: line-through;
+}
